@@ -1,0 +1,223 @@
+{
+  "api": {
+    "name": "SmsRetrieverPlugin",
+    "slug": "smsretrieverplugin",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "getAppSignature",
+        "signature": "() => Promise<AppSignature>",
+        "parameters": [],
+        "returns": "Promise<AppSignature>",
+        "tags": [
+          {
+            "name": "since",
+            "text": "0.1.0"
+          }
+        ],
+        "docs": "This is a helper method to generate your message hash to be included in your SMS message.\nWithout the correct hash, your app won't receive the message callback. This only needs to be generated once per app and stored.\n\nNote: Do not use hash strings dynamically computed on the client in your verification messages.",
+        "complexTypes": [
+          "AppSignature"
+        ],
+        "slug": "getappsignature"
+      },
+      {
+        "name": "requestPhoneNumber",
+        "signature": "() => Promise<HintPhoneNumber>",
+        "parameters": [],
+        "returns": "Promise<HintPhoneNumber>",
+        "tags": [
+          {
+            "name": "since",
+            "text": "0.1.0"
+          }
+        ],
+        "docs": "Initiate hint picker to prompt the user to choose from the phone numbers stored on the device.",
+        "complexTypes": [
+          "HintPhoneNumber"
+        ],
+        "slug": "requestphonenumber"
+      },
+      {
+        "name": "startSmsReceiver",
+        "signature": "() => Promise<RegisterReceiver>",
+        "parameters": [],
+        "returns": "Promise<RegisterReceiver>",
+        "tags": [
+          {
+            "name": "since",
+            "text": "0.1.0"
+          }
+        ],
+        "docs": "Start to listen for SMS messages.",
+        "complexTypes": [
+          "RegisterReceiver"
+        ],
+        "slug": "startsmsreceiver"
+      },
+      {
+        "name": "removeSmsReceiver",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [
+          {
+            "name": "since",
+            "text": "0.1.0"
+          }
+        ],
+        "docs": "Stop to listen for SMS messages.",
+        "complexTypes": [],
+        "slug": "removesmsreceiver"
+      },
+      {
+        "name": "addListener",
+        "signature": "(eventName: 'onSmsReceive', listenerFunc: (receivedMessage: ReceivedMessage) => void) => Promise<PluginListenerHandle> & PluginListenerHandle",
+        "parameters": [
+          {
+            "name": "eventName",
+            "docs": "",
+            "type": "'onSmsReceive'"
+          },
+          {
+            "name": "listenerFunc",
+            "docs": "",
+            "type": "(receivedMessage: ReceivedMessage) => void"
+          }
+        ],
+        "returns": "Promise<PluginListenerHandle> & PluginListenerHandle",
+        "tags": [
+          {
+            "name": "since",
+            "text": "0.1.0"
+          }
+        ],
+        "docs": "Listen for when SMS is coming",
+        "complexTypes": [
+          "PluginListenerHandle",
+          "ReceivedMessage"
+        ],
+        "slug": "addlisteneronsmsreceive-"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "AppSignature",
+      "slug": "appsignature",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "signature",
+          "tags": [
+            {
+              "text": "0.1.0",
+              "name": "since"
+            }
+          ],
+          "docs": "App signature.",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "HintPhoneNumber",
+      "slug": "hintphonenumber",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "phoneNumber",
+          "tags": [
+            {
+              "text": "0.1.0",
+              "name": "since"
+            }
+          ],
+          "docs": "Phone number user selected",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "RegisterReceiver",
+      "slug": "registerreceiver",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "isRegistered",
+          "tags": [
+            {
+              "text": "0.1.0",
+              "name": "since"
+            }
+          ],
+          "docs": "Returns if register receiver started or not.",
+          "complexTypes": [],
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "PluginListenerHandle",
+      "slug": "pluginlistenerhandle",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "remove",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "() => Promise<void>"
+        }
+      ]
+    },
+    {
+      "name": "ReceivedMessage",
+      "slug": "receivedmessage",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "message",
+          "tags": [
+            {
+              "text": "0.1.0",
+              "name": "since"
+            }
+          ],
+          "docs": "Received message with hash",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "error",
+          "tags": [
+            {
+              "text": "0.1.0",
+              "name": "since"
+            }
+          ],
+          "docs": "In case of any error",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    }
+  ],
+  "enums": [],
+  "typeAliases": [],
+  "pluginConfigs": []
+}
