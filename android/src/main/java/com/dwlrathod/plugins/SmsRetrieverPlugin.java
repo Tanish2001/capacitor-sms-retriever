@@ -1,9 +1,11 @@
 package com.dwlrathod.plugins;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
+import android.os.Build;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
@@ -45,12 +47,12 @@ public class SmsRetrieverPlugin extends Plugin implements
     public void requestPhoneNumber(PluginCall call) {
 
         if (!GooglePlayServicesHelper.isAvailable(getContext())) {
-            call.error(GooglePlayServicesHelper.UNAVAILABLE_ERROR_MESSAGE);
+            call.errorCallback(GooglePlayServicesHelper.UNAVAILABLE_ERROR_MESSAGE);
             return;
         }
 
         if (!GooglePlayServicesHelper.hasSupportedVersion(getContext())) {
-            call.error(GooglePlayServicesHelper.UNSUPPORTED_VERSION_ERROR_MESSAGE);
+            call.errorCallback(GooglePlayServicesHelper.UNSUPPORTED_VERSION_ERROR_MESSAGE);
             return;
         }
 
@@ -86,14 +88,14 @@ public class SmsRetrieverPlugin extends Plugin implements
                     info.put("phoneNumber", credential.getId());
                     savedCall.resolve(info);
                 } else {
-                    savedCall.error(SOMETHING_WENT_WRONG);
+                    savedCall.errorCallback(SOMETHING_WENT_WRONG);
                 }
             } else if (resultCode == RESULT_CANCELED) {
-                savedCall.error(PHONE_HINT_USER_CANCELLED);
+                savedCall.errorCallback(PHONE_HINT_USER_CANCELLED);
             } else if (resultCode == CredentialsApi.ACTIVITY_RESULT_NO_HINTS_AVAILABLE) {
-                savedCall.error(PHONE_HINT_NO_HINTS_AVAILABLE);
+                savedCall.errorCallback(PHONE_HINT_NO_HINTS_AVAILABLE);
             } else {
-                savedCall.error(SOMETHING_WENT_WRONG);
+                savedCall.errorCallback(SOMETHING_WENT_WRONG);
             }
         }
     }
@@ -104,12 +106,12 @@ public class SmsRetrieverPlugin extends Plugin implements
     public void startSmsReceiver(PluginCall call) {
 
         if (!GooglePlayServicesHelper.isAvailable(getContext())) {
-            call.error(GooglePlayServicesHelper.UNAVAILABLE_ERROR_MESSAGE);
+            call.errorCallback(GooglePlayServicesHelper.UNAVAILABLE_ERROR_MESSAGE);
             return;
         }
 
         if (!GooglePlayServicesHelper.hasSupportedVersion(getContext())) {
-            call.error(GooglePlayServicesHelper.UNSUPPORTED_VERSION_ERROR_MESSAGE);
+            call.errorCallback(GooglePlayServicesHelper.UNSUPPORTED_VERSION_ERROR_MESSAGE);
             return;
         }
 
@@ -140,7 +142,7 @@ public class SmsRetrieverPlugin extends Plugin implements
         task.addOnFailureListener(e -> {
             // Failed to start retriever, inspect Exception for more details
             PluginCall savedCall = getSavedCall();
-            savedCall.error(e.getLocalizedMessage());
+            savedCall.errorCallback(e.getLocalizedMessage());
         });
     }
 
@@ -154,7 +156,9 @@ public class SmsRetrieverPlugin extends Plugin implements
 
         try {
             // Registers receiver to listen for SMS
-            getContext().registerReceiver(smsReceiver, intentFilter);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                getContext().registerReceiver(smsReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED);
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
